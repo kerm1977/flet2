@@ -7,11 +7,11 @@ def create_login_form(switch_to_register, navigate_to_home_func):
     username = ft.TextField(label="Usuario")
     password = ft.TextField(label="Contraseña", password=True, can_reveal_password=True)
     remember_me = ft.Checkbox(label="Recordarme")
-    login_button = ft.ElevatedButton("Iniciar Sesión", on_click=lambda e: login(e, username.value, password.value))
+    login_button = ft.ElevatedButton("Iniciar Sesión", on_click=lambda e: login(e, username.value, password.value, navigate_to_home_func))
     register_link = ft.TextButton("¿No tienes cuenta? Regístrate aquí", on_click=switch_to_register)
-    error_text = ft.Text("", color=ft.colors.RED)
+    error_text = ft.Text("", color=ft.Colors.RED)
 
-    def login(e, username_value, password_value):
+    def login(e, username_value, password_value, navigate_to_home_func):
         global logged_in
         if username_value and password_value:
             error_text.value = ""
@@ -42,11 +42,11 @@ def create_register_form(switch_to_login):
     phone = ft.TextField(label="Teléfono", keyboard_type=ft.KeyboardType.PHONE)
     password = ft.TextField(label="Contraseña", password=True, can_reveal_password=True)
     confirm_password = ft.TextField(label="Confirmar Contraseña", password=True, can_reveal_password=True)
-    register_button = ft.ElevatedButton("Registrar", on_click=lambda e: register(e, username.value, email.value, phone.value, password.value, confirm_password.value))
+    register_button = ft.ElevatedButton("Registrar", on_click=lambda e: register(e, username.value, email.value, phone.value, password.value, confirm_password.value, switch_to_login))
     login_link = ft.TextButton("¿Ya tienes cuenta? Inicia sesión aquí", on_click=switch_to_login)
     error_text = ft.Text("", color=ft.Colors.RED)
 
-    def register(e, username_value, email_value, phone_value, password_value, confirm_password_value):
+    def register(e, username_value, email_value, phone_value, password_value, confirm_password_value, switch_to_login):
         global logged_in
         if not all([username_value, email_value, phone_value, password_value, confirm_password_value]):
             error_text.value = "Por favor, completa todos los campos."
@@ -108,7 +108,7 @@ def inicio_view(navigate_to_account_func, is_logged_in, logout_func): # Recibir 
     if not is_logged_in:
         controls.append(
             ft.GestureDetector(
-                ft.Container( # El control a detectar va como primer argumento
+                content=ft.Container( # El control a detectar va como primer argumento
                     content=ft.Icon(ft.Icons.PERSON_OUTLINE, size=30),
                     padding=10,
                     alignment=ft.alignment.top_right,
@@ -132,6 +132,7 @@ def main(page: ft.Page):
     page.title = "Mi App Flet Básica"
 
     def show_login(e):
+        print("show_login called") # Para depuración
         page_ref.clean()
         login_form = create_login_form(switch_to_register=show_register, navigate_to_home_func=navigate_to_home)
         page_ref.add(
@@ -144,7 +145,7 @@ def main(page: ft.Page):
                     ),
                     ft.Container(  # Contenedor para la NavigationBar
                         content=ft.NavigationBar(
-                            bgcolor=ft.colors.TRANSPARENT,
+                            bgcolor=ft.Colors.TRANSPARENT,
                             destinations=[
                                 ft.NavigationBarDestination(icon=ft.Icons.HOME, label="Inicio"),
                                 ft.NavigationBarDestination(icon=ft.Icons.EVENT, label="Eventos"),
@@ -171,6 +172,7 @@ def main(page: ft.Page):
         page_ref.update()
 
     def show_register(e):
+        print("show_register called") # Para depuración
         page_ref.clean()
         register_form = create_register_form(switch_to_login=show_login)
         page_ref.add(
@@ -183,7 +185,7 @@ def main(page: ft.Page):
                     ),
                     ft.Container(  # Contenedor para la NavigationBar
                         content=ft.NavigationBar(
-                            bgcolor=ft.colors.TRANSPARENT,
+                            bgcolor=ft.Colors.TRANSPARENT,
                             destinations=[
                                 ft.NavigationBarDestination(icon=ft.Icons.HOME, label="Inicio"),
                                 ft.NavigationBarDestination(icon=ft.Icons.EVENT, label="Eventos"),
@@ -210,9 +212,11 @@ def main(page: ft.Page):
         page_ref.update()
 
     def navigate_to_account(e):
+        print("navigate_to_account called") # Para depuración
         show_login(None) # Mostrar el formulario de login al presionar el icono de usuario
 
     def navigate_to_home(index):
+        print(f"navigate_to_home called with index: {index}") # Para depuración
         if index == 0: # El índice 0 corresponde al icono "Inicio"
             page_ref.clean()
             page_ref.add(inicio_view(navigate_to_account, logged_in, logout)) # Pasar la función de logout
