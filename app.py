@@ -44,7 +44,7 @@ def create_register_form(switch_to_login):
     confirm_password = ft.TextField(label="Confirmar Contraseña", password=True, can_reveal_password=True)
     register_button = ft.ElevatedButton("Registrar", on_click=lambda e: register(e, username.value, email.value, phone.value, password.value, confirm_password.value))
     login_link = ft.TextButton("¿Ya tienes cuenta? Inicia sesión aquí", on_click=switch_to_login)
-    error_text = ft.Text("", color=ft.colors.RED)
+    error_text = ft.Text("", color=ft.Colors.RED)
 
     def register(e, username_value, email_value, phone_value, password_value, confirm_password_value):
         global logged_in
@@ -84,7 +84,7 @@ def inicio_view(navigate_to_account_func, is_logged_in, logout_func): # Recibir 
         ),
         ft.Container(  # Contenedor para la NavigationBar en la parte inferior (inicial)
             content=ft.NavigationBar(
-                bgcolor=ft.colors.TRANSPARENT,
+                bgcolor=ft.Colors.TRANSPARENT,
                 destinations=[
                     ft.NavigationBarDestination(icon=ft.Icons.HOME, label="Inicio"),
                     ft.NavigationBarDestination(icon=ft.Icons.EVENT, label="Eventos"),
